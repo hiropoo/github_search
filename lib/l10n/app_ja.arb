@@ -1,0 +1,13 @@
+{
+	"@@locale": "ja",
+	"search": "検索",
+	"searchHintText": "リポジトリを検索",
+	"settings": "設定",
+	"appAppearance": "アプリの外観",
+	"darkMode": "ダークモード",
+	"useDeviceTheme": "端末の設定を使う",
+	"language": "言語",
+	"aboutApp": "アプリについて",
+	"version": "バージョン",
+	"cancel": "キャンセル"
+}

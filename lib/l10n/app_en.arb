@@ -1,0 +1,15 @@
+{
+	"@@locale": "en",
+	"search": "Search",
+    "searchHintText": "Search Repositories",
+	"settings": "Settings",
+    "appAppearance": "App Appearance",
+    "darkMode": "Dark Mode",
+    "useDeviceTheme": "Use Device Theme",
+    "language": "Language",
+    "aboutApp": "About This App",
+    "version": "Version",
+
+    "cancel": "Cancel"
+
+}
