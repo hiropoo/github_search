@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:github_search/src/features/settings/presentation/theme/theme_mode_notifier.dart';
+import 'package:github_search/src/features/settings/presentation/theme/use_device_theme_mode_notifier.dart';
 import 'package:github_search/src/router/app_router.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,6 +14,12 @@ class SettingsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // ダークモードのオンオフ
+    final isDarkMode = ref.watch(appThemeModeProvider).valueOrNull == ThemeMode.dark;
+
+    // 端末の設定を使うかどうか
+    final useDeviceTheme = ref.watch(useDeviceThemeProvider).valueOrNull ?? false;
+
     // アプリのバージョンを取得
     final fromPlatform = useMemoized(PackageInfo.fromPlatform);
     final snapshot = useFuture(fromPlatform);
@@ -39,16 +47,20 @@ class SettingsPage extends HookConsumerWidget {
               SettingsTile.switchTile(
                 leading: const Icon(Icons.brightness_4),
                 title: Text(AppLocalizations.of(context)!.darkMode),
-                initialValue: false,
-                onToggle: (value) {},
+                initialValue: isDarkMode,
+                onToggle: (value) {
+                  ref.read(appThemeModeProvider.notifier).toggleTheme();
+                },
               ),
 
               // 端末のテーマ設定を使うかどうか
               SettingsTile.switchTile(
                 leading: const Icon(Icons.app_settings_alt_rounded),
                 title: Text(AppLocalizations.of(context)!.useDeviceTheme),
-                initialValue: false,
-                onToggle: (value) {},
+                initialValue: useDeviceTheme,
+                onToggle: (value) {
+                  ref.read(useDeviceThemeProvider.notifier).toggleUseDeviceTheme();
+                },
               ),
 
               // 言語設定
