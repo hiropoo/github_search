@@ -4,11 +4,14 @@ import 'package:github_search/src/utils/api_client.dart';
 
 class GithubApiClient extends ApiClient {
   /// GithubResponseクラスを使用してリポジトリ情報の検索結果を返すメソッド
-  Future<GithubResponse> searchRepositories(String query) async {
+  Future<GithubResponse> searchRepositories(String query, {int page = 1}) async {
     try {
       final response = await dio.get(
         'https://api.github.com/search/repositories',
-        queryParameters: {'q': query},
+        queryParameters: {
+          'q': query,
+          'page': page,
+        },
       );
       return GithubResponse.fromJson(response.data);
     } on DioException catch (e) {

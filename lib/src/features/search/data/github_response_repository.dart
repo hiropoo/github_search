@@ -9,11 +9,11 @@ GithubResponseRepository githubResponseRepository(GithubResponseRepositoryRef re
 
 class GithubResponseRepository {
   /// APIを利用してリポジトリ情報の検索結果を返すメソッド
-  Future<GithubResponse> searchRepositories(String query) async {
+  Future<GithubResponse> searchRepositories(String query, {int page = 1}) async {
     final api = GithubApiClient();
 
     try {
-      final response = await api.searchRepositories(query);
+      final response = await api.searchRepositories(query, page: page);
       return response;
     } catch (e) {
       throw Exception(e);
