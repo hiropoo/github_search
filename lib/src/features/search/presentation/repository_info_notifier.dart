@@ -1,81 +1,68 @@
-import 'package:github_search/src/features/search/domain/owner.dart';
+import 'package:github_search/src/features/search/data/github_response_repository.dart';
 import 'package:github_search/src/features/search/domain/repository_info.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'repository_info_notifier.g.dart';
 
-@riverpod
-class RepositoryInfoNotifier extends _$RepositoryInfoNotifier {
+@Riverpod(keepAlive: true)
+class RepositoryInfoListNotifier extends _$RepositoryInfoListNotifier {
+  int _page = 1; // 現在のページ番号
+  bool _hasNextPage = false; // 次のページがあるかどうか
+  String _currentQuery = '';
+  bool _isFetching = false; // 重複リクエストを防ぐためのフラグ
+
   @override
   Future<List<RepositoryInfo>> build() async {
-    await Future.delayed(const Duration(seconds: 1));
+    return [];
+  }
 
-    return [
-      const RepositoryInfo(
-        fullName: 'C/c',
-        owner: Owner(
-          avatarUrl: 'https://avatars.githubusercontent.com/u/14101776?v=4',
-        ),
-        htmlUrl: '',
-        description: 'Flutter makes it easy and fast to build beautiful apps for mobile and beyond.',
-        stargazersCount: 100000,
-        watchersCount: 10000,
-        forksCount: 1000,
-        openIssuesCount: 100,
-        language: 'C',
-      ),
-      const RepositoryInfo(
-        fullName: 'flutter/flutter',
-        owner: Owner(
-          avatarUrl: 'https://avatars.githubusercontent.com/u/14101776?v=4',
-        ),
-        htmlUrl: '',
-        description: 'Flutter makes it easy and fast to build beautiful apps for mobile and beyond.',
-        stargazersCount: 100000,
-        watchersCount: 10000,
-        forksCount: 1000,
-        openIssuesCount: 100,
-        language: 'Dart',
-      ),
-      const RepositoryInfo(
-        fullName: 'Java/java',
-        owner: Owner(
-          avatarUrl: 'https://avatars.githubusercontent.com/u/14101776?v=4',
-        ),
-        htmlUrl: '',
-        description: 'Flutter makes it easy and fast to build beautiful apps for mobile and beyond.',
-        stargazersCount: 100000,
-        watchersCount: 10000,
-        forksCount: 1000,
-        openIssuesCount: 100,
-        language: 'Java',
-      ),
-      const RepositoryInfo(
-        fullName: 'flutter/flutter',
-        owner: Owner(
-          avatarUrl: 'https://avatars.githubusercontent.com/u/14101776?v=4',
-        ),
-        htmlUrl: '',
-        description: 'Flutter makes it easy and fast to build beautiful apps for mobile and beyond.',
-        stargazersCount: 100000,
-        watchersCount: 10000,
-        forksCount: 1000,
-        openIssuesCount: 100,
-        language: 'Dart',
-      ),
-      const RepositoryInfo(
-        fullName: 'flutter/flutter',
-        owner: Owner(
-          avatarUrl: 'https://avatars.githubusercontent.com/u/14101776?v=4',
-        ),
-        htmlUrl: '',
-        description: 'Flutter makes it easy and fast to build beautiful apps for mobile and beyond.',
-        stargazersCount: 100000,
-        watchersCount: 10000,
-        forksCount: 1000,
-        openIssuesCount: 100,
-        language: 'Dart',
-      ),
-    ];
+  /// 検索を実行するメソッド
+  Future<void> searchRepositories(String query) async {
+    _currentQuery = query;
+    _page = 1; // 新しい検索時にページをリセット
+    state = const AsyncLoading();
+
+    state = await AsyncValue.guard(() async {
+      return _fetchRepositories();
+    });
+  }
+
+  /// 実際にリポジトリデータを取得するメソッド
+  Future<List<RepositoryInfo>> _fetchRepositories() async {
+    final response = await ref.read(githubResponseRepositoryProvider).searchRepositories(_currentQuery, page: _page);
+
+    // 次のページがあるかどうかを判定
+    if (response.items.length < response.totalCount) {
+      _hasNextPage = true;
+    }
+
+    return response.items;
+  }
+
+  /// 検索をリセットするメソッド
+  void reset() {
+    _page = 1;
+    _hasNextPage = false;
+    _currentQuery = '';
+
+    state = const AsyncData([]);
+  }
+
+  /// 次のページを取得するメソッド
+  Future<void> fetchNextPage() async {
+    if (_isFetching || state.isLoading || !_hasNextPage) return; // 重複リクエストを防止
+    _isFetching = true; // フェッチ中のフラグを設定
+
+    try {
+      _page++; // 次のページ番号にインクリメント
+      final newItems = await _fetchRepositories();
+
+      // 現在のリストに新しいリポジトリを追加
+      state = state.whenData((existingItems) => [...existingItems, ...newItems]);
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+    } finally {
+      _isFetching = false; // フェッチ終了時にフラグをリセット
+    }
   }
 }

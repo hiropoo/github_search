@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:github_search/src/components/search_list_tile.dart';
 import 'package:github_search/src/components/search_textfield.dart';
-import 'package:github_search/src/features/search/data/github_response_repository.dart';
 import 'package:github_search/src/features/search/presentation/repository_info_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -12,8 +11,17 @@ class SearchPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
-    final repositoryList = ref.watch(repositoryInfoNotifierProvider);
-    final repositoryListNotifier = ref.read(repositoryInfoNotifierProvider.notifier);
+    final repositoryList = ref.watch(repositoryInfoListNotifierProvider);
+    final repositoryListNotifier = ref.read(repositoryInfoListNotifierProvider.notifier);
+
+    final scrollController = useScrollController();
+
+    // スクロール位置を監視して、末尾に達したら次のページを取得する
+    scrollController.addListener(() {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+        repositoryListNotifier.fetchNextPage();
+      }
+    });
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -27,11 +35,10 @@ class SearchPage extends HookConsumerWidget {
               if (query.isEmpty) {
                 return;
               }
-              debugPrint('Submitted: $query');
 
-              final response = await ref.read(githubResponseRepositoryProvider).searchRepositories(query);
-
-              debugPrint('Response: $response');
+              // 検索をリセットして新しいクエリを実行
+              repositoryListNotifier.reset();
+              await repositoryListNotifier.searchRepositories(query);
             },
           ),
 
@@ -40,6 +47,8 @@ class SearchPage extends HookConsumerWidget {
             data: (repositoryInfoList) {
               return Expanded(
                 child: ListView.builder(
+                  controller: scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
                   itemCount: repositoryInfoList.length,
                   itemBuilder: (context, index) {
                     return SearchListTile(
