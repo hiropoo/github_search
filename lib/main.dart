@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:github_search/src/constants/my_theme.dart';
+import 'package:github_search/src/features/settings/presentation/language/language_notifier.dart';
 import 'package:github_search/src/features/settings/presentation/theme/theme_mode_notifier.dart';
 import 'package:github_search/src/features/settings/presentation/theme/use_device_theme_mode_notifier.dart';
 import 'package:github_search/src/router/app_router.dart';
@@ -32,9 +33,10 @@ class MainApp extends ConsumerWidget {
     final goRouter = ref.watch(goRouterProvider);
     final themeMode = ref.watch(appThemeModeProvider).valueOrNull;
     final useDeviceTheme = ref.watch(useDeviceThemeProvider).valueOrNull;
+    final locale = ref.watch(languageNotifierProvider).valueOrNull;
 
     // 非同期の読み込みが完了したかどうかを確認
-    if (themeMode == null || useDeviceTheme == null) {
+    if (themeMode == null || useDeviceTheme == null || locale == null) {
       return const SizedBox.shrink(); // ローディング中の場合、空のウィジェットを返す
     }
 
@@ -52,6 +54,7 @@ class MainApp extends ConsumerWidget {
         Locale('en', ''), // English
         Locale('ja', ''), // 日本語
       ],
+      locale: locale,
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: useDeviceTheme == true ? ThemeMode.system : themeMode,
