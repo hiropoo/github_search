@@ -8,12 +8,15 @@ import 'package:github_search/src/features/settings/presentation/language/langua
 import 'package:github_search/src/features/settings/presentation/theme/theme_mode_notifier.dart';
 import 'package:github_search/src/features/settings/presentation/theme/use_device_theme_mode_notifier.dart';
 import 'package:github_search/src/router/app_router.dart';
+import 'package:github_search/src/utils/language_colors.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() async {
   // スプラッシュ画面を表示
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // 言語カラーの読み込み
+  await LanguageColors.load();
 
   // .envファイルの読み込み
   await dotenv.load(fileName: '.env');
