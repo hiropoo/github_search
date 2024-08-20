@@ -18,8 +18,6 @@ class LanguageColorIcon extends ConsumerWidget {
     final colorHex = colorMap[language]?['color'] ?? '0xFF0095d9'; // デフォルト色は青
     final color = Color(int.parse(colorHex));
 
-    debugPrint('Language: $language, Color: $color, ColorHex: $colorHex');
-
     return Container(
       margin: const EdgeInsets.only(right: Sizes.p4),
       width: Theme.of(context).textTheme.bodyMedium!.fontSize,
