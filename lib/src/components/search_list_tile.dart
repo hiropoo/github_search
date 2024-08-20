@@ -44,6 +44,8 @@ class SearchListTile extends StatelessWidget {
                 ),
                 child: Text(
                   repositoryInfo.fullName.isEmpty ? '---' : repositoryInfo.fullName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -53,8 +55,13 @@ class SearchListTile extends StatelessWidget {
 
             // 説明と言語、スター数
             subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(repositoryInfo.description),
+                Text(
+                  repositoryInfo.description,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
