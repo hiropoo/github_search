@@ -1,5 +1,6 @@
 import 'package:github_search/src/features/search/data/github_response_repository.dart';
 import 'package:github_search/src/features/search/domain/repository_info.dart';
+import 'package:github_search/src/utils/list_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'repository_info_notifier.g.dart';
@@ -53,12 +54,20 @@ class RepositoryInfoListNotifier extends _$RepositoryInfoListNotifier {
     if (_isFetching || state.isLoading || !_hasNextPage) return; // 重複リクエストを防止
     _isFetching = true; // フェッチ中のフラグを設定
 
+    final prevState = state;
+    state = const AsyncLoading<List<RepositoryInfo>>().copyWithPrevious(state); // 現在の状態を保持
+
     try {
       _page++; // 次のページ番号にインクリメント
       final newItems = await _fetchRepositories();
 
       // 現在のリストに新しいリポジトリを追加
-      state = state.whenData((existingItems) => [...existingItems, ...newItems]);
+      state = prevState.whenData((existingItems) {
+        // 既存のアイテムの末尾の100個
+        final last100Items = existingItems.isNotEmpty ? existingItems.takeLast(100) : [];
+        // 末尾の100個と新しいアイテムを結合
+        return [...last100Items, ...newItems];
+      });
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     } finally {

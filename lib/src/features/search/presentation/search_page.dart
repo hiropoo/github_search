@@ -14,14 +14,28 @@ class SearchPage extends HookConsumerWidget {
     final repositoryList = ref.watch(repositoryInfoListNotifierProvider);
     final repositoryListNotifier = ref.read(repositoryInfoListNotifierProvider.notifier);
 
-    final scrollController = useScrollController();
-
     // スクロール位置を監視して、末尾に達したら次のページを取得する
+    final scrollController = useScrollController();
     scrollController.addListener(() {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         repositoryListNotifier.fetchNextPage();
       }
     });
+
+    // 検索バーから検索を実行するメソッド
+    final onSubmitted = useCallback(
+      (query) async {
+        // 空文字やスペースのみの場合は何もしない
+        if (query.isEmpty || query.contains(' ') || query.contains('　')) {
+          return;
+        }
+
+        // 検索をリセットして新しいクエリを実行
+        repositoryListNotifier.reset();
+        await repositoryListNotifier.searchRepositories(query);
+      },
+      [],
+    );
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -31,15 +45,7 @@ class SearchPage extends HookConsumerWidget {
           // 検索バー
           SearchTextfield(
             controller: searchController,
-            onSubmitted: (query) async {
-              if (query.isEmpty) {
-                return;
-              }
-
-              // 検索をリセットして新しいクエリを実行
-              repositoryListNotifier.reset();
-              await repositoryListNotifier.searchRepositories(query);
-            },
+            onSubmitted: onSubmitted,
           ),
 
           // 検索結果
@@ -49,8 +55,17 @@ class SearchPage extends HookConsumerWidget {
                 child: ListView.builder(
                   controller: scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: repositoryInfoList.length,
+                  itemCount: repositoryInfoList.length + 1,
                   itemBuilder: (context, index) {
+                    // 最後のアイテムでローディングインジケータを表示
+                    if (index == repositoryInfoList.length) {
+                      if (repositoryList.isLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    }
+
                     return SearchListTile(
                       repositoryInfo: repositoryInfoList[index],
                     );
