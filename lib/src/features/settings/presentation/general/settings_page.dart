@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:github_search/src/features/settings/presentation/language/language_notifier.dart';
 import 'package:github_search/src/features/settings/presentation/theme/theme_mode_notifier.dart';
 import 'package:github_search/src/features/settings/presentation/theme/use_device_theme_mode_notifier.dart';
 import 'package:github_search/src/router/app_router.dart';
@@ -19,6 +20,10 @@ class SettingsPage extends HookConsumerWidget {
 
     // 端末の設定を使うかどうか
     final useDeviceTheme = ref.watch(useDeviceThemeProvider).valueOrNull ?? false;
+
+    // 選択された言語を取得
+    final selectedLocale = ref.watch(languageNotifierProvider).valueOrNull ?? const Locale('en');
+    String language = selectedLocale == const Locale('en') ? 'English' : '日本語';
 
     // アプリのバージョンを取得
     final fromPlatform = useMemoized(PackageInfo.fromPlatform);
@@ -67,15 +72,15 @@ class SettingsPage extends HookConsumerWidget {
               SettingsTile(
                 leading: const Icon(Icons.language),
                 title: Text(AppLocalizations.of(context)!.language),
-                value: const Row(
+                value: Row(
                   children: [
                     Text(
-                      'English',
+                      language,
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize,
                       ),
                     ),
-                    Icon(color: Colors.grey, Icons.keyboard_arrow_right),
+                    const Icon(color: Colors.grey, Icons.keyboard_arrow_right),
                   ],
                 ),
                 onPressed: (context) => context.goNamed(AppRoute.language.name),
