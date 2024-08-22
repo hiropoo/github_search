@@ -1,6 +1,6 @@
 import 'package:github_search/src/features/search/data/github_response_repository.dart';
 import 'package:github_search/src/features/search/domain/repository_info.dart';
-import 'package:github_search/src/utils/list_extensions.dart';
+import 'package:github_search/src/utils/extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'repository_info_notifier.g.dart';

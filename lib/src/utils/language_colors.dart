@@ -9,7 +9,7 @@ class LanguageColors {
   /// JSONファイルをロードして色マップを初期化する
   static Future<void> load() async {
     try {
-      final jsonString = await rootBundle.loadString('assets/language_colors.json');
+      final jsonString = await rootBundle.loadString('assets/data/language_colors.json');
       final Map<String, dynamic> jsonMap = json.decode(jsonString);
 
       _colorMap = jsonMap.map(
