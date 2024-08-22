@@ -96,7 +96,12 @@ class SettingsPage extends HookConsumerWidget {
               SettingsTile(
                 leading: const Icon(Icons.info),
                 title: Text(AppLocalizations.of(context)!.version),
-                value: Text("${snapshot.data?.version}"),
+                value: Text(
+                  "${snapshot.data?.version}",
+                  style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize,
+                  ),
+                ),
               ),
             ],
           ),
