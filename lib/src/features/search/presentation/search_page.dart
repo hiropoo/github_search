@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:github_search/src/components/error_page.dart';
 import 'package:github_search/src/components/search_list_tile.dart';
+import 'package:github_search/src/components/search_loading_indicator.dart';
 import 'package:github_search/src/components/search_textfield.dart';
+import 'package:github_search/src/constants/app_sizes.dart';
 import 'package:github_search/src/features/search/presentation/repository_info_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -26,7 +29,7 @@ class SearchPage extends HookConsumerWidget {
     final onSubmitted = useCallback(
       (query) async {
         // 空文字やスペースのみの場合は何もしない
-        if (query.isEmpty || query.contains(' ') || query.contains('　')) {
+        if (query.isEmpty || query == ' ' || query == '　') {
           return;
         }
 
@@ -60,7 +63,11 @@ class SearchPage extends HookConsumerWidget {
                     // 最後のアイテムでローディングインジケータを表示
                     if (index == repositoryInfoList.length) {
                       if (repositoryList.isLoading) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(
+                            child: Padding(
+                          padding: EdgeInsets.all(Sizes.p32),
+                          child: CircularProgressIndicator(),
+                        ));
                       } else {
                         return const SizedBox.shrink();
                       }
@@ -73,12 +80,8 @@ class SearchPage extends HookConsumerWidget {
                 ),
               );
             },
-            error: (error, stackTrace) {
-              return Text('Error: $error');
-            },
-            loading: () {
-              return const Expanded(child: Center(child: CircularProgressIndicator()));
-            },
+            error: (error, _) => ErrorPage(error: error),
+            loading: () => const SearchLoadingIndicator(),
           ),
         ],
       ),

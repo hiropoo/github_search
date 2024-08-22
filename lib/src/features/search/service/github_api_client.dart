@@ -15,7 +15,18 @@ class GithubApiClient extends ApiClient {
       );
       return GithubResponse.fromJson(response.data);
     } on DioException catch (e) {
-      throw Exception(e.message);
+      switch (e.type) {
+        case DioExceptionType.badResponse:
+          final statusCode = e.response?.statusCode;
+          throw DioException(
+            requestOptions: e.requestOptions,
+            response: e.response,
+            type: DioExceptionType.badResponse,
+            error: 'Error Code :$statusCode',
+          );
+        default:
+          throw Exception('An unexpected error occurred: ${e.message}');
+      }
     }
   }
 }

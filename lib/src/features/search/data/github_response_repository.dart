@@ -16,7 +16,7 @@ class GithubResponseRepository {
       final response = await api.searchRepositories(query, page: page);
       return response;
     } catch (e) {
-      throw Exception(e);
+      rethrow;  // エラーをはUIで処理
     }
   }
 }
