@@ -1,15 +1,15 @@
 {
 	"@@locale": "en",
 	"search": "Search",
-    "searchHintText": "Search Repositories",
+	"searchHintText": "Search Repositories",
 	"settings": "Settings",
-    "appAppearance": "App Appearance",
-    "darkMode": "Dark Mode",
-    "useDeviceTheme": "Use Device Theme",
-    "language": "Language",
-    "aboutApp": "About This App",
-    "version": "Version",
-
-    "cancel": "Cancel"
-
+	"appAppearance": "App Appearance",
+	"darkMode": "Dark Mode",
+	"useDeviceTheme": "Use Device Theme",
+	"language": "Language",
+	"aboutApp": "About This App",
+	"version": "Version",
+	"cancel": "Cancel",
+	"errorCode": "Error Code",
+	"errorDescription": "An error occurred while fetching data.\nPlease take a few moments and try again."
 }

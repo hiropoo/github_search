@@ -9,5 +9,7 @@
 	"language": "言語",
 	"aboutApp": "アプリについて",
 	"version": "バージョン",
-	"cancel": "キャンセル"
+	"cancel": "キャンセル",
+	"errorCode": "エラーコード",
+	"errorDescription": "データの取得中にエラーが発生しました。\n少し待ってから再度お試しください。"
 }
