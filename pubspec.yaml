@@ -48,3 +48,27 @@ flutter:
     - .env
     - assets/data/
     - assets/lottie/
+
+# dart run flutter_native_splash:create
+# 768 x 768 以内の画像
+flutter_native_splash:
+  color: "#202020"
+  image: assets/image/icon/github-search-splash-icon.png
+  color_dark: "#202020"
+  image_dark: assets/image/icon/github-search-splash-icon.png
+  android_12:
+    image: assets/image/icon/github-search-splash-adaptive-icon.png
+    icon_background_color: "#202020"
+    image_dark: assets/image/icon/github-search-splash-adaptive-icon.png
+    icon_background_color_dark: "#202020"
+
+# flutter pub run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: true
+  # size: 512 x 512 くらい
+  image_path: "assets/image/icon/github-search-splash-icon.png"
+  # size: 上のサイズの50%くらいの背景透過画像
+
+  adaptive_icon_background: "#202020"
+  adaptive_icon_foreground: "assets/image/icon/github-search-splash-adaptive-icon.png"
