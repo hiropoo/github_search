@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:github_search/src/features/base/presentation/main_page.dart';
-import 'package:github_search/src/features/search/presentation/details_page.dart';
+import 'package:github_search/src/features/search/domain/repository_info.dart';
+import 'package:github_search/src/features/search/presentation/details/details_page.dart';
 import 'package:github_search/src/features/search/presentation/search_page.dart';
 import 'package:github_search/src/features/settings/presentation/general/settings_page.dart';
 import 'package:github_search/src/features/settings/presentation/language/language_select_page.dart';
@@ -43,9 +44,10 @@ GoRouter goRouter(GoRouterRef ref) {
                 builder: (context, state) => const SearchPage(),
                 routes: [
                   GoRoute(
+                    parentNavigatorKey: _rootNavigatorKey,
                     path: 'details',
                     name: AppRoute.details.name,
-                    builder: (context, state) => const DetailsPage(),
+                    builder: (context, state) => DetailsPage(repositoryInfo: state.extra as RepositoryInfo),
                   ),
                 ],
               ),

@@ -3,6 +3,8 @@ import 'package:github_search/src/components/language_color_icon.dart';
 import 'package:github_search/src/components/star_icon.dart';
 import 'package:github_search/src/constants/app_sizes.dart';
 import 'package:github_search/src/features/search/domain/repository_info.dart';
+import 'package:github_search/src/router/app_router.dart';
+import 'package:go_router/go_router.dart';
 
 class SearchListTile extends StatelessWidget {
   const SearchListTile({super.key, required this.repositoryInfo});
@@ -24,7 +26,10 @@ class SearchListTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
 
         // カードをタップしたときの処理
-        onTap: () {},
+        onTap: () {
+          // リポジトリ詳細ページに遷移
+          context.goNamed(AppRoute.details.name, extra: repositoryInfo);
+        },
 
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: Sizes.p16, vertical: Sizes.p4),

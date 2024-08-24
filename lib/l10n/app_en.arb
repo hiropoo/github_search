@@ -11,5 +11,12 @@
 	"version": "Version",
 	"cancel": "Cancel",
 	"errorCode": "Error Code",
-	"errorDescription": "An error occurred while fetching data.\nPlease take a few moments and try again."
+	"errorDescription": "An error occurred while fetching data.\nPlease take a few moments and try again.",
+
+	"repoLanguage": "Language",
+	"repoStars": "Stars",
+	"repoForks": "Forks",
+	"repoWatchers": "Watchers",
+	"repoIssues": "Issues",
+	"viewOnGithub": "View on GitHub"
 }

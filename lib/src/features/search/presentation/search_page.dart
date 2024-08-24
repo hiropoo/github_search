@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:github_search/src/components/error_page.dart';
+import 'package:github_search/src/components/error_card.dart';
 import 'package:github_search/src/components/search_list_tile.dart';
 import 'package:github_search/src/components/search_loading_indicator.dart';
 import 'package:github_search/src/components/search_textfield.dart';
@@ -80,7 +80,7 @@ class SearchPage extends HookConsumerWidget {
                 ),
               );
             },
-            error: (error, _) => ErrorPage(error: error),
+            error: (error, _) => ErrorCard(error: error),
             loading: () => const SearchLoadingIndicator(),
           ),
         ],

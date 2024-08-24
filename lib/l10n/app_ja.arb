@@ -11,5 +11,11 @@
 	"version": "バージョン",
 	"cancel": "キャンセル",
 	"errorCode": "エラーコード",
-	"errorDescription": "データの取得中にエラーが発生しました。\n少し待ってから再度お試しください。"
+	"errorDescription": "データの取得中にエラーが発生しました。\n少し待ってから再度お試しください。",
+	"repoLanguage": "言語",
+	"repoStars": "スター",
+	"repoForks": "フォーク",
+	"repoWatchers": "ウォッチャー",
+	"repoIssues": "イシュー",
+	"viewOnGithub": "GitHubで見る"
 }

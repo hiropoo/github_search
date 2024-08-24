@@ -4,8 +4,8 @@ import 'package:github_search/src/constants/app_sizes.dart';
 import 'package:github_search/src/utils/extensions.dart';
 import 'package:lottie/lottie.dart';
 
-class ErrorPage extends StatelessWidget {
-  const ErrorPage({super.key, required this.error});
+class ErrorCard extends StatelessWidget {
+  const ErrorCard({super.key, required this.error});
 
   final Object error;
 
