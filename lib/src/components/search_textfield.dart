@@ -62,6 +62,9 @@ class SearchTextfield extends HookWidget {
                 decoration: InputDecoration(
                   // ヒントテキスト
                   hintText: AppLocalizations.of(context)!.searchHintText,
+                  hintStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.onSecondary.withOpacity(0.5),
+                  ),
 
                   // 背景色
                   fillColor: Theme.of(context).colorScheme.surfaceContainer,
