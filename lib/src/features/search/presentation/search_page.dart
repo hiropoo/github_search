@@ -7,6 +7,7 @@ import 'package:github_search/src/components/search_textfield.dart';
 import 'package:github_search/src/constants/app_sizes.dart';
 import 'package:github_search/src/features/search/presentation/repository_info_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
 class SearchPage extends HookConsumerWidget {
   const SearchPage({super.key});
@@ -60,6 +61,16 @@ class SearchPage extends HookConsumerWidget {
                   physics: const AlwaysScrollableScrollPhysics(),
                   itemCount: repositoryInfoList.length + 1,
                   itemBuilder: (context, index) {
+                    // アイテムがない場合は初期画面を表示
+                    if (repositoryInfoList.isEmpty) {
+                      return Lottie.asset(
+                        'assets/lottie/search-loading.json',
+                        fit: BoxFit.fill,
+                        repeat: false,
+                        animate: true,
+                      );
+                    }
+
                     // 最後のアイテムでローディングインジケータを表示
                     if (index == repositoryInfoList.length) {
                       if (repositoryList.isLoading) {
